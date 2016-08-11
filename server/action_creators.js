@@ -80,6 +80,13 @@ export function startRound() {
     }
 }
 
+export function endGame(winner) {
+    return (dispatch, getState) => {
+        dispatch(changeState(GAME_RESULT))
+        dispatch(setWinner(winner))
+    }
+}
+
 export function beginDiscussion() {
     return (dispatch, getState) => {
         dispatch(changeState(DISCUSSION))
@@ -97,7 +104,19 @@ export function roundResult() {
 
 export function handleRoundEnd() {
     return (dispatch, getState) => {
-        dispatch(startRound())
+        let state = getState(),
+            roleCounts = state.get('users')
+                .filter(u => u.get('alive'))
+                .countBy(u => u.get('role'))
+
+        console.log(roleCounts)
+        if (!roleCounts['mafia']) {
+            dispatch(endGame('villager'))
+        } else if (roleCounts['mafia'] >= roleCounts['villager']) {
+            dispatch(endGame('mafia'))
+        } else {
+            dispatch(startRound())
+        }
     }
 }
 
@@ -232,6 +251,13 @@ export function assignRole(user, role) {
         type: 'ASSIGN_ROLE',
         socket_id,
         role
+    }
+}
+
+export function setWinner(team) {
+    return {
+        type: 'SET_WINNER',
+        team
     }
 }
 

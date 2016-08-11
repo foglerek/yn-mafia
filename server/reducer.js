@@ -9,7 +9,8 @@ let defaultState = {
     votes: List(),
     mafia_votes: List(),
     cop_votes: List(),
-    result: null
+    result: null,
+    winner: null
 }
 
 let defaultUser = Map({
@@ -69,7 +70,14 @@ export default function reducer(state = defaultState, action) {
                 )
             }
         case 'RELEASE_ROUND_RESULT':
-            return state.update('result', action.result)
+            return state
+                .update('result', action.result)
+                .update('users', users => users.map(u => {
+                    let gotDead = [action.result.votedOut, action.result.killed].includes(u.get('socket_id'))
+                    return u.set('alive', !gotDead)
+                }))
+        case 'SET_WINNER':
+            return state.update('winner', action.team)
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState
