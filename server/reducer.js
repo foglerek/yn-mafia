@@ -4,15 +4,17 @@ import {
 } from './states'
 
 let defaultState = {
-    state: WAITING_FOR_PLAYERS
+    state: WAITING_FOR_PLAYERS,
+    users: List([])
 }
 
 export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case 'ADD_USER':
-            return state.mergeDeep({
-                users: List([action.data])
-            })
+            return state.updateIn(
+                ['users'],
+                list => list.push(Map(action.user))
+            )
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState

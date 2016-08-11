@@ -1,6 +1,13 @@
+import { Map, List } from 'immutable'
 import {
     WAITING_FOR_PLAYERS,
-    READY_TO_START
+    READY_TO_START,
+    ANNOUNCE_ROLES,
+    INITIAL_COUNTDOWN,
+    DISCUSSION,
+    TIME_UP,
+    ROUND_RESULT,
+    GAME_RESULT
 } from './states'
 import {
     MIN_PLAYERS
@@ -17,9 +24,13 @@ export function userConnected(socket) {
 export function joinGame(data) {
     return (dispatch, getState) => {
         let state = getState()
-        if (state.get('state') === WAITING_FOR_PLAYERS) {
-            dispatch(addUser(data))
-            dispatch(playerJoined())
+        if ([WAITING_FOR_PLAYERS, READY_TO_START].includes(state.get('state'))) {
+            if (state.get('users').includes(Map(data))) {
+                return state
+            } else {
+                dispatch(addUser(data))
+                dispatch(playerJoined())
+            }
         } else {
             return state
         }
@@ -34,21 +45,21 @@ export function startGame() {
 
 export function startRound() {
     return (dispatch, getState) => {
-        dispatch(changeState('initial_countdown'))
+        dispatch(changeState(INITIAL_COUNTDOWN))
         dispatch(startTimer(10))
     }
 }
 
 export function beginDiscussion() {
     return (dispatch, getState) => {
-        dispatch(changeState('discussion'))
+        dispatch(changeState(DISCUSSION))
         dispatch(startTimer(90))
     }
 }
 
 export function roundResult() {
     return (dispatch, getState) => {
-        dispatch(changeState('round_result'))
+        dispatch(changeState(ROUND_RESULT))
         dispatch(startTimer(30))
     }
 }
@@ -101,14 +112,14 @@ export function timeUp() {
     return (dispatch, getState) => {
         let state = getState().get('state')
         switch (state) {
-            case 'initial_countdown':
+            case INITIAL_COUNTDOWN:
                 dispatch(beginDiscussion())
-            case 'discussion':
+            case DISCUSSION:
                 dispatch(changeState('time_up'))
                 dispatch(setTimer(10))
-            case 'time_up':
+            case TIME_UP:
                 dispatch(roundResult())
-            case 'round_result':
+            case ROUND_RESULT:
                 dispatch(handleRoundEnd())
         }
     }
@@ -128,10 +139,10 @@ export function updateVotes(data) {
     }
 }
 
-export function addUser(data) {
+export function addUser(user) {
     return {
         type: 'ADD_USER',
-        data
+        user
     }
 }
 
