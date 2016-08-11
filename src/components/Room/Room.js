@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import io from 'socket.io-client';
 
-const HomeView = React.createClass({
+const Room = React.createClass({
     startGame() {
+      console.log(this.props.users);
     },
     enableButton() {
     },
@@ -31,5 +32,9 @@ function mapDispatchToProps(dispatch) {
   return { ...bindActionCreators({  }), dispatch };
 }
 
-export default connect(null, mapDispatchToProps)(HomeView);
+Room.propTypes = {
+  users: React.PropTypes.array.isRequired,
+}
+
+export default Room;
 
