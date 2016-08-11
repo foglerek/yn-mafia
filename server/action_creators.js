@@ -1,3 +1,11 @@
+import {
+    WAITING_FOR_PLAYERS,
+    READY_TO_START
+} from './states'
+import {
+    MIN_PLAYERS
+} from './config'
+
 export function userConnected(socket) {
     return (dispatch, getState) => {
         let state = getState();
@@ -8,8 +16,13 @@ export function userConnected(socket) {
 
 export function joinGame(data) {
     return (dispatch, getState) => {
-        dispatch(addUser(data))
-        dispatch(changeState('waiting_for_players'))
+        let state = getState()
+        if (state.get('state') === WAITING_FOR_PLAYERS) {
+            dispatch(addUser(data))
+            dispatch(playerJoined())
+        } else {
+            return state
+        }
     }
 }
 
@@ -43,6 +56,17 @@ export function roundResult() {
 export function handleRoundEnd() {
     return (dispatch, getState) => {
         dispatch(startRound())
+    }
+}
+
+export function playerJoined() {
+    return (dispatch, getState) => {
+        let state = getState()
+        if (state.get('users').length >= MIN_PLAYERS) {
+            dispatch(changeState(READY_TO_START))
+        } else {
+            return state
+        }
     }
 }
 

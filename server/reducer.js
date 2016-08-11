@@ -1,7 +1,10 @@
 import { Map, List } from 'immutable'
+import {
+    WAITING_FOR_PLAYERS
+} from './states'
 
 let defaultState = {
-    state: 'waiting_for_players'
+    state: WAITING_FOR_PLAYERS
 }
 
 export default function reducer(state = defaultState, action) {
