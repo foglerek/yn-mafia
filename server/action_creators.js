@@ -62,7 +62,7 @@ export function startGame() {
     return (dispatch, getState) => {
         // Calculate Roles
         let state = getState(),
-            numUsers = state.get('users').length,
+            numUsers = state.get('users').count(),
             roles = genRoles(numUsers)
 
         state.get('users').map(user => {
@@ -122,7 +122,7 @@ export function calculateRoundResult() {
 export function playerJoined() {
     return (dispatch, getState) => {
         let state = getState()
-        if (state.get('users').length >= MIN_PLAYERS) {
+        if (state.get('users').count() >= MIN_PLAYERS) {
             dispatch(changeState(READY_TO_START))
         } else {
             return state
@@ -133,7 +133,7 @@ export function playerJoined() {
 export function playerLeft() {
     return (dispatch, getState) => {
         let state = getState()
-        if (state.get('users').length < MIN_PLAYERS) {
+        if (state.get('users').count() < MIN_PLAYERS) {
             dispatch(changeState(WAITING_FOR_PLAYERS))
         } else {
             return state
