@@ -1,7 +1,14 @@
 
 export function joinGame(data) {
-    return function(dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(addUser(data))
+        dispatch(changeState('waiting_for_players'))
+    }
+}
+
+export function startGame() {
+    return (dispatch, getState) => {
+        dispatch(changeState('initial_countdown'))
     }
 }
 

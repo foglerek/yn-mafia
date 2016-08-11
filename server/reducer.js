@@ -8,7 +8,7 @@ export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case 'ADD_USER':
             return state.mergeDeep({
-                users: List([data.user])
+                users: List([action.data])
             })
         case 'CHANGE_STATE':
             return state.merge({
