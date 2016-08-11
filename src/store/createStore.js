@@ -8,7 +8,6 @@ import makeRootReducer from './reducers'
 import createSocketIoMiddleware from 'redux-socket.io';
 
 import { injectReducer } from '../store/reducers'
-import AppReducer from '../AppReducer';
 
 
 export default (initialState = {}, history, socket) => {
@@ -17,7 +16,7 @@ export default (initialState = {}, history, socket) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, routerMiddleware(history)];
+  const middleware = [thunk, routerMiddleware(history), socketIoMiddleware];
 
   // ======================================================
   // Store Enhancers
@@ -39,7 +38,7 @@ export default (initialState = {}, history, socket) => {
     compose(
       applyMiddleware(...middleware),
       ...enhancers
-    )
+    ),
   )
   store.asyncReducers = {}
 

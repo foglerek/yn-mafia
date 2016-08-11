@@ -38,10 +38,10 @@ const history = syncHistoryWithStore(browserHistory, store, {
 })
 
 
+injectReducer(store, {key: 'AppReducer', AppReducer});
 socket.on('state', (state) => {
   store.dispatch({type:  'SET_STATE', state});
 });
-injectReducer(store, {key: 'AppReducer', AppReducer});
 
 
 // ========================================================
