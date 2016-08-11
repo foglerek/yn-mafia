@@ -12,6 +12,7 @@ import {
 import {
     MIN_PLAYERS
 } from './config'
+import { genRoles } from './core'
 
 export function userConnected(socket) {
     return (dispatch, getState) => {
@@ -52,12 +53,22 @@ export function joinGame(data, socketId) {
 export function leaveGame(socketId) {
     return (dispatch, getState) => {
         dispatch(removeUser(socketId))
+        dispatch(playerLeft())
     }
 }
 
 export function startGame() {
     return (dispatch, getState) => {
-        dispatch(startRound())
+        // Calculate Roles
+        let state = getState(),
+            numUsers = state.get('users').length,
+            roles = genRoles(numUsers)
+
+        state.get('users').map(user => {
+            dispatch(assignRole(user, roles.pop()))
+        })
+        dispatch(changeState(ANNOUNCE_ROLES))
+        dispatch(setTimer(15))
     }
 }
 
@@ -99,6 +110,17 @@ export function playerJoined() {
     }
 }
 
+export function playerLeft() {
+    return (dispatch, getState) => {
+        let state = getState()
+        if (state.get('users').length < MIN_PLAYERS) {
+            dispatch(changeState(WAITING_FOR_PLAYERS))
+        } else {
+            return state
+        }
+    }
+}
+
 export function voteUser(data) {
     return (dispatch, getState) => {
         dispatch(updateVotes())
@@ -130,6 +152,8 @@ export function timeUp() {
     return (dispatch, getState) => {
         let state = getState().get('state')
         switch (state) {
+            case ANNOUNCE_ROLES:
+                dispatch(startRound())
             case INITIAL_COUNTDOWN:
                 dispatch(beginDiscussion())
             case DISCUSSION:
@@ -168,6 +192,14 @@ export function removeUser(socketId) {
     return {
         type: 'REMOVE_USER',
         socket_id: socketId
+    }
+}
+
+export function assignRole(user, role) {
+    return {
+        type: 'ASSIGN_ROLE',
+        user,
+        role
     }
 }
 
