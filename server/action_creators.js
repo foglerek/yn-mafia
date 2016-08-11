@@ -1,3 +1,4 @@
+import { Map, List } from 'immutable'
 import {
     WAITING_FOR_PLAYERS,
     READY_TO_START,
@@ -24,8 +25,12 @@ export function joinGame(data) {
     return (dispatch, getState) => {
         let state = getState()
         if ([WAITING_FOR_PLAYERS, READY_TO_START].includes(state.get('state'))) {
-            dispatch(addUser(data))
-            dispatch(playerJoined())
+            if (state.get('users').includes(Map(data))) {
+                return state
+            } else {
+                dispatch(addUser(data))
+                dispatch(playerJoined())
+            }
         } else {
             return state
         }

@@ -4,7 +4,8 @@ import {
 } from './states'
 
 let defaultState = {
-    state: WAITING_FOR_PLAYERS
+    state: WAITING_FOR_PLAYERS,
+    users: List([])
 }
 
 export default function reducer(state = defaultState, action) {
@@ -12,7 +13,7 @@ export default function reducer(state = defaultState, action) {
         case 'ADD_USER':
             return state.updateIn(
                 ['users'],
-                seq => seq ? seq.push(action.user) : List([action.user])
+                list => list.push(Map(action.user))
             )
         case 'CHANGE_STATE':
             return state.merge({
