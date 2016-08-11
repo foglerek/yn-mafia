@@ -65,6 +65,8 @@ export function startGame() {
             numUsers = state.get('users').count(),
             roles = genRoles(numUsers)
 
+        console.log(roles)
+
         state.get('users').map(user => {
             dispatch(assignRole(user.get('socket_id'), roles.pop()))
         })
@@ -246,7 +248,7 @@ export function removeUser(socketId) {
     }
 }
 
-export function assignRole(user, role) {
+export function assignRole(socket_id, role) {
     return {
         type: 'ASSIGN_ROLE',
         socket_id,

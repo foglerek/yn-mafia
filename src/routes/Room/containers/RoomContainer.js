@@ -20,6 +20,7 @@ const Main = React.createClass({
 })
 
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
         AppReducer: state.AppReducer
     }

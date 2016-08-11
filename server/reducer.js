@@ -33,16 +33,19 @@ export default function reducer(state = defaultState, action) {
                 list => list.filterNot(user => user.get('socket_id') === action.socket_id)
             )
         case 'ASSIGN_ROLE':
-            return state.update(
+            let statetest = state.update(
                 'users',
-                list => list.update(
-                    list.findKey(user => user.get('socket_id') === action.socket_id),
-                    (user) => {
-                        user.role = action.role
+                list => list.map(
+                    user => {
+                        if (user.get('socket_id') === action.socket_id) {
+                            return user.set('role', action.role)
+                        }
                         return user
                     }
                 )
             )
+            console.log(statetest)
+            return statetest
         case 'UPDATE_VOTES':
             let role = state.get('users').find(u => u.socket_id = action.by).get('role'),
                 type = action.special ? (role === 'cop' ? 'cop_votes' : 'mafia_votes') : 'votes'
