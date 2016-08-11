@@ -1,10 +1,11 @@
-var app = require('express')();
-var http = require('http').Server(app);
+let app = require('express')();
+let http = require('http').Server(app);
+let port = process.env.PORT || 8080;
 
-app.get('/', function(req, res){
+app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(port, () => {
+  console.log(`listening on ${port}`);
 });
