@@ -7,6 +7,7 @@ export default function bindActions(socket, store) {
             case 'JOIN_GAME':
                 return store.dispatch(joinGame(action.data, socket.id))
             case 'START_GAME':
+                console.log('start game server');
                 return store.dispatch(startGame())
             case 'VOTE_USER':
                 store.dispatch(voteUser(socket.id, action.data))

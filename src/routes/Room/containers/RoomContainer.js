@@ -1,4 +1,6 @@
 import { connect } from 'react-redux'
+import React from 'react';
+import * as actions from '../modules/room';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -11,8 +13,11 @@ import Room from 'components/Room'
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
-const mapDispatchToProps = {
-}
+const Main = React.createClass({
+    render: function() {
+        return React.createElement(Room, Object.assign({}, this.props));
+    }
+})
 
 const mapStateToProps = (state) => {
     return {
@@ -34,4 +39,4 @@ const mapStateToProps = (state) => {
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
-export default connect(mapStateToProps, mapDispatchToProps)(Room)
+export default connect(mapStateToProps, actions)(Main)

@@ -9,17 +9,11 @@ import { Table } from 'react-bootstrap';
 
 const Room = React.createClass({
     startGame() {
-      console.log(this.props.AppReducer);
+      this.props.startGame();
     },
     enableButton() {
     },
     componentWillMount() {
-      this.socket = io('http://localhost:3000');
-      this.socket.on('state', (state) => {
-        if(state.state === 'ready_to_start') {
-
-        }
-      });
     },
     render() {
         return (<div>
@@ -27,7 +21,7 @@ const Room = React.createClass({
                     <Table striped bordered condensed hover>
                       <tbody>
                         {this.props.AppReducer.users && this.props.AppReducer.users.map((user) => {
-                          return (<tr key={user.socket_id}><td>{user.name}</td></tr>)
+                          return (<tr key={user.socket_id}><td>{user.name}</td><td>{user.role}</td></tr>)
                         })}
                       </tbody>
                     </Table>
