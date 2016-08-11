@@ -10,9 +10,10 @@ let defaultState = {
 export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case 'ADD_USER':
-            return state.mergeDeep({
-                users: List([action.data])
-            })
+            return state.updateIn(
+                ['users'],
+                seq => seq ? seq.push(action.user) : List([action.user])
+            )
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState
