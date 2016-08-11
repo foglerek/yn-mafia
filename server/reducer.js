@@ -29,10 +29,13 @@ export default function reducer(state = defaultState, action) {
         case 'ASSIGN_ROLE':
             return state.updateIn(
                 ['users'],
-                list => list.update(list.keyOf(action.user), (user) => {
-                    user.role = action.role
-                    return user
-                })
+                list => list.update(
+                    list.findKey(user => user.get('socket_id') === action.socket_id),
+                    (user) => {
+                        user.role = action.role
+                        return user
+                    }
+                )
             )
         case 'CHANGE_STATE':
             return state.merge({
