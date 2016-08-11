@@ -17,6 +17,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
+    AppReducer: state.AppReducer
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
