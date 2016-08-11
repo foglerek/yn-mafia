@@ -5,6 +5,7 @@ import { FormGroup, FormControl, ControlLabel, ButtonToolbar, Button } from 'rea
 import { connect } from 'react-redux';
 import { addUser } from '../../redux/modules/UserActions';
 import { bindActionCreators } from 'redux';
+import io from 'socket.io-client';
 
 const Start = React.createClass({
     getInitialState() {
@@ -12,10 +13,16 @@ const Start = React.createClass({
     },
     addUser() {
       console.log(this.state.name);
-      this.props.dispatch(addUser(this.state.name))
+      this.socket.emit('JOIN_GAME', { name: this.state.name });
     },
     handleNameChange(e) {
       this.setState({name: e.target.value});
+    },
+    componentWillMount() {
+      this.socket = io('http://localhost:3000');
+      this.socket.on('state', (state) => {
+        console.log(state);
+      });
     },
     render() {
         return (<div>

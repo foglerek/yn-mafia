@@ -9,16 +9,5 @@
 <body>
     <div id="root" style="height: 100%"></div>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io();
-      let state = {}
-      socket.on('state', function(newState) {
-        state = newState;
-        console.log(newState);
-      });
-      setTimeout(function() {
-        socket.emit('join_game', { name: 'John' })
-      }, 5000);
-    </script>
 </body>
 </html>
