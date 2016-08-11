@@ -8,13 +8,15 @@ let defaultState = {
     users: List(),
     votes: List(),
     mafia_votes: List(),
-    cop_votes: List()
+    cop_votes: List(),
+    result: null
 }
 
 let defaultUser = Map({
     socket_id: null,
     name: null,
-    role: null
+    role: null,
+    alive: true
 })
 
 export default function reducer(state = defaultState, action) {
@@ -66,6 +68,8 @@ export default function reducer(state = defaultState, action) {
                     })
                 )
             }
+        case 'RELEASE_ROUND_RESULT':
+            return state.update('result', action.result)
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState

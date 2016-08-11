@@ -13,6 +13,7 @@ import {
     MIN_PLAYERS
 } from './config'
 import { genRoles } from './core'
+import { determineMafiaKill, determineCopIdentified, determineVotedOut } from './vote'
 
 export function userConnected(socket) {
     return (dispatch, getState) => {
@@ -88,6 +89,7 @@ export function beginDiscussion() {
 
 export function roundResult() {
     return (dispatch, getState) => {
+        dispatch(calculateRoundResult())
         dispatch(changeState(ROUND_RESULT))
         dispatch(startTimer(30))
     }
@@ -96,6 +98,24 @@ export function roundResult() {
 export function handleRoundEnd() {
     return (dispatch, getState) => {
         dispatch(startRound())
+    }
+}
+
+export function calculateRoundResult() {
+    return (dispatch, getState) => {
+        let state = getState(),
+            votedOut = determineVotedOut(state.get('votes')),
+            identified = determineCopIdentified(state.get('cop_votes'), state.get('users'), votedOut),
+            killed = determineMafiaKill(state.get('mafia_votes'), votedOut)
+
+        dispatch({
+            type: 'RELEASE_ROUND_RESULT',
+            result: {
+                votedOut,
+                killed,
+                identified
+            }
+        })
     }
 }
 
