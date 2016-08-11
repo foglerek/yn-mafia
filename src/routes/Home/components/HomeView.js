@@ -22,7 +22,7 @@ const HomeView = React.createClass({
     componentWillMount() {
       this.socket = io('http://localhost:3000');
       this.socket.on('state', (state) => {
-        console.log('state', state);
+        console.log('state homeview', state);
       });
     },
     render() {
