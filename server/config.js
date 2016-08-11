@@ -1,1 +1,1 @@
-export const MIN_PLAYERS = 1
+export const MIN_PLAYERS = 5

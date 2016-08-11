@@ -26,7 +26,7 @@ const Room = React.createClass({
                       </tbody>
                     </Table>
 
-                    <Button onClick={this.startGame} bsStyle="primary">Start Game</Button>
+                    {this.props.AppReducer.state === 'READY_TO_START' ? <Button onClick={this.startGame} bsStyle="primary">Start Game</Button> : <a></a>  }
                 </div>);
     }
 });
