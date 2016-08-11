@@ -1,4 +1,4 @@
-const initialState = 0;
+const initialState = {};
 
 export default function appReducer(state = initialState, action){
 
@@ -6,7 +6,7 @@ export default function appReducer(state = initialState, action){
   switch (action.type) {
     case 'SET_STATE':
 
-      return state + action.state;
+      return Object.assign({}, action.state);
     default:
       return state
   }
