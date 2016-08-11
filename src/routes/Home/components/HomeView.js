@@ -20,10 +20,6 @@ export default React.createClass({
       this.setState({name: e.target.value});
     },
     componentWillMount() {
-      this.socket = io('http://localhost:3000');
-      this.socket.on('state', (state) => {
-        console.log('state homeview', state);
-      });
     },
     render() {
         return (<div>
