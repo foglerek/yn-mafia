@@ -1,5 +1,5 @@
 import React from 'react'
-import DuckImage from '../assets/Duck.jpg'
+import MafiaImage from '../assets/werewolf.jpg'
 import classes from './HomeView.scss'
 import { IndexLink, Link } from 'react-router'
 // import classes from './Start.scss'
@@ -25,9 +25,9 @@ export default React.createClass({
         return (<div>
                     <h4>Welcome!</h4>
                     <img
-                      alt='This is a duck, because Redux!'
+                      alt='This is a werewolf, because Mafia game!'
                       className={classes.duck}
-                      src={DuckImage} />
+                      src={MafiaImage} />
                     <FormGroup>
                     <FormControl
                       type="text"
