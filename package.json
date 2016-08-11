@@ -15,8 +15,11 @@
     "deploy": "npm run build && npm run serve"
   },
   "dependencies": {
-    "vue": "^1.0.21",
-    "babel-runtime": "^6.0.0"
+    "babel-runtime": "^6.0.0",
+    "redux": "^3.5.2",
+    "revue": "^2.2.0",
+    "socket.io": "^1.4.8",
+    "vue": "^1.0.21"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
