@@ -10,15 +10,12 @@ import io from 'socket.io-client';
 
 
 
-import { injectReducer } from '../store/reducers'
+import { injectReducer } from './store/reducers'
 import AppReducer from './AppReducer';
 
 
 //TODO See how to change the server regarding the Heroku ENV
 const socket = io('http://localhost:3000');
-
-const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
-
 
 // ========================================================
 // Browser History Setup

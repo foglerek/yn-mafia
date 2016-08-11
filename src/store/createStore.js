@@ -8,7 +8,7 @@ import makeRootReducer from './reducers'
 import createSocketIoMiddleware from 'redux-socket.io';
 
 import { injectReducer } from '../store/reducers'
-import AppReducer from './AppReducer';
+import AppReducer from '../AppReducer';
 
 
 export default (initialState = {}, history, socket) => {
