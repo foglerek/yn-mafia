@@ -15,6 +15,12 @@ export default function reducer(state = defaultState, action) {
                 ['users'],
                 list => list.push(Map(action.user))
             )
+        case 'REMOVE_USER':
+            console.log(action)
+            return state.updateIn(
+                ['users'],
+                list => list.filterNot(user => user.get('socket_id') === action.socket_id)
+            )
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState

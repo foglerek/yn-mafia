@@ -21,19 +21,37 @@ export function userConnected(socket) {
     }
 }
 
-export function joinGame(data) {
+export function userDisconnected(socket) {
+    return (dispatch, getState) => {
+        dispatch(leaveGame(socket.id))
+    }
+}
+
+export function joinGame(data, socketId) {
     return (dispatch, getState) => {
         let state = getState()
         if ([WAITING_FOR_PLAYERS, READY_TO_START].includes(state.get('state'))) {
-            if (state.get('users').includes(Map(data))) {
+            let userExists = state.get('users').some(
+                (user) => {
+                    return user.get('socket_id') === socketId
+                }
+            )
+            if (userExists) {
                 return state
             } else {
+                data.socket_id = socketId
                 dispatch(addUser(data))
                 dispatch(playerJoined())
             }
         } else {
             return state
         }
+    }
+}
+
+export function leaveGame(socketId) {
+    return (dispatch, getState) => {
+        dispatch(removeUser(socketId))
     }
 }
 
@@ -143,6 +161,13 @@ export function addUser(user) {
     return {
         type: 'ADD_USER',
         user
+    }
+}
+
+export function removeUser(socketId) {
+    return {
+        type: 'REMOVE_USER',
+        socket_id: socketId
     }
 }
 
