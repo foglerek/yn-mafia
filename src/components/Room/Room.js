@@ -1,6 +1,4 @@
 import React from 'react'
-import DuckImage from '../assets/Duck.jpg'
-import classes from './HomeView.scss'
 import { IndexLink, Link } from 'react-router'
 // import classes from './Start.scss'
 import { FormGroup, FormControl, ControlLabel, ButtonToolbar, Button } from 'react-bootstrap';
