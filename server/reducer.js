@@ -19,7 +19,7 @@ export default function reducer(state = defaultState, action) {
         case 'ADD_USER':
             return state.updateIn(
                 ['users'],
-                list => list.push(Map.merge(defaultUser, action.user))
+                list => list.push(Map(defaultUser).merge(action.user))
             )
         case 'REMOVE_USER':
             return state.updateIn(
