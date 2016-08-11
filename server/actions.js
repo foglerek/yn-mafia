@@ -9,9 +9,9 @@ export default function bindActions(socket, store) {
             case 'START_GAME':
                 return store.dispatch(startGame())
             case 'VOTE_USER':
-                store.dispatch(voteUser(action.data))
+                store.dispatch(voteUser(socket.id, action.data))
             case 'SPECIAL_VOTE_USER':
-                store.dispatch(specialVoteUser(action.data))
+                store.dispatch(specialVoteUser(socket.id, action.data))
         }
     })
 

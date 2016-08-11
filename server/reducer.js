@@ -5,7 +5,10 @@ import {
 
 let defaultState = {
     state: WAITING_FOR_PLAYERS,
-    users: List([])
+    users: List(),
+    votes: List(),
+    mafia_votes: List(),
+    cop_votes: List()
 }
 
 let defaultUser = Map({
@@ -17,18 +20,18 @@ let defaultUser = Map({
 export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case 'ADD_USER':
-            return state.updateIn(
-                ['users'],
+            return state.update(
+                'users',
                 list => list.push(Map(defaultUser).merge(action.user))
             )
         case 'REMOVE_USER':
-            return state.updateIn(
-                ['users'],
+            return state.update(
+                'users',
                 list => list.filterNot(user => user.get('socket_id') === action.socket_id)
             )
         case 'ASSIGN_ROLE':
-            return state.updateIn(
-                ['users'],
+            return state.update(
+                'users',
                 list => list.update(
                     list.findKey(user => user.get('socket_id') === action.socket_id),
                     (user) => {
@@ -37,6 +40,32 @@ export default function reducer(state = defaultState, action) {
                     }
                 )
             )
+        case 'UPDATE_VOTES':
+            let role = state.get('users').find(u => u.socket_id = action.by).get('role'),
+                type = action.special ? (role === 'cop' ? 'cop_votes' : 'mafia_votes') : 'votes'
+
+            let voteByUser = state.get(type).findKey(vote => vote.voter_id === action.by)
+
+            if (voteByUser) {
+                return state.update(
+                    type,
+                    votes => votes.update(
+                        voteByUser,
+                        vote => {
+                            vote.on = action.on
+                            return vote
+                        }
+                    )
+                )
+            } else {
+                return state.update(
+                    type,
+                    votes => votes.append({
+                        on: action.on,
+                        by: action.by
+                    })
+                )
+            }
         case 'CHANGE_STATE':
             return state.merge({
                 state: action.toState
