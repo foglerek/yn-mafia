@@ -8,13 +8,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import io from 'socket.io-client';
 
-const HomeView = React.createClass({
+export default React.createClass({
     getInitialState() {
       return { name: '' };
     },
     addUser() {
       console.log(this.state.name);
-      this.socket.emit('JOIN_GAME', { name: this.state.name });
+      this.props.joinGame(this.state.name);
     },
     handleNameChange(e) {
       this.setState({name: e.target.value});
@@ -47,5 +47,3 @@ const HomeView = React.createClass({
 function mapDispatchToProps(dispatch) {
   return { ...bindActionCreators({  }), dispatch };
 }
-
-export default connect(null, mapDispatchToProps)(HomeView);

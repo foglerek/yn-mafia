@@ -31,15 +31,17 @@ const browserHistory = useRouterHistory(createBrowserHistory)({
 // react-router-redux reducer under the routerKey "router" in src/routes/index.js,
 // so we need to provide a custom `selectLocationState` to inform
 // react-router-redux of its location.
-const initialState = window.___INITIAL_STATE__
+const initialState = {};
 const store = createStore(initialState, browserHistory, socket);
 const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: (state) => state.router
 })
 
+history.listen(location => console.log(location.pathname) );
 
 injectReducer(store, {key: 'AppReducer', reducer: AppReducer });
 socket.on('state', (state) => {
+  console.log('Got a state');
   store.dispatch({type: 'SET_STATE', state});
 });
 
