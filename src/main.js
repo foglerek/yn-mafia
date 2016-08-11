@@ -3,8 +3,22 @@ import ReactDOM from 'react-dom'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { useRouterHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
-import createStore from './store/createStore'
+import createStore from './store/createStore';
+
 import AppContainer from './containers/AppContainer'
+import io from 'socket.io-client';
+
+
+
+import { injectReducer } from '../store/reducers'
+import AppReducer from './AppReducer';
+
+
+//TODO See how to change the server regarding the Heroku ENV
+const socket = io('http://localhost:3000');
+
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+
 
 // ========================================================
 // Browser History Setup
@@ -21,10 +35,18 @@ const browserHistory = useRouterHistory(createBrowserHistory)({
 // so we need to provide a custom `selectLocationState` to inform
 // react-router-redux of its location.
 const initialState = window.___INITIAL_STATE__
-const store = createStore(initialState, browserHistory)
+const store = createStore(initialState, browserHistory, socket);
 const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: (state) => state.router
 })
+
+
+socket.on('state', (state) => {
+  store.dispatch({type:  'SET_STATE', state});
+});
+
+injectReducer(store, {key: 'AppReducer', AppReducer});
+
 
 // ========================================================
 // Developer Tools Setup

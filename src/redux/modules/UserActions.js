@@ -6,3 +6,9 @@ export function addUser(name) {
         }
     };
 }
+export function setState(state){
+  return {
+    type: 'SET_STATE',
+    payload: state
+  }
+}
