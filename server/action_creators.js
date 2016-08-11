@@ -121,15 +121,25 @@ export function playerLeft() {
     }
 }
 
-export function voteUser(data) {
+export function voteUser(by, on) {
     return (dispatch, getState) => {
-        dispatch(updateVotes())
+        let state = getState()
+        if (state.get('state') === DISCUSSION) {
+            dispatch(updateVotes(by, on))
+        } else {
+            return state
+        }
     }
 }
 
-export function specialVoteUser(data) {
+export function specialVoteUser(by, on) {
     return (dispatch, getState) => {
-        dispatch(updateVotes())
+        let state = getState()
+        if (state.get('state') === DISCUSSION) {
+            dispatch(updateVotes(by, on, true))
+        } else {
+            return state
+        }
     }
 }
 
@@ -174,10 +184,12 @@ export function setTimer(seconds) {
     }
 }
 
-export function updateVotes(data) {
+export function updateVotes(by, on, special = false) {
     return {
         type: 'UPDATE_VOTES',
-        data
+        by,
+        on,
+        special
     }
 }
 
