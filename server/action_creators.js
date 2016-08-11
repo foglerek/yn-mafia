@@ -11,3 +11,10 @@ export function addUser(data) {
         data
     }
 }
+
+export function changeState(data) {
+    return {
+        type: 'CHANGE_STATE',
+        data
+    }
+}
