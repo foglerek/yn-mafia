@@ -14,9 +14,12 @@ import Room from 'components/Room'
 const mapDispatchToProps = {
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
   users: state.users
-})
+}
+}
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 

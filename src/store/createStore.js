@@ -17,7 +17,7 @@ export default (initialState = {}, history, socket) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, routerMiddleware(history), socketIoMiddleware];
+  const middleware = [thunk, routerMiddleware(history)];
 
   // ======================================================
   // Store Enhancers
