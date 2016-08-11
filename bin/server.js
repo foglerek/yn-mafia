@@ -2,6 +2,7 @@ import config from '../config'
 import server from '../server/main'
 import newStore from '../server/store'
 import bindActions from '../server/actions'
+import { userConnected } from '../server/action_creators'
 import _debug from 'debug'
 import socketio from 'socket.io'
 import http from 'http'
@@ -22,9 +23,7 @@ let store = newStore(io);
 // Register Socket IO hook
 io.on('connection', (socket) => {
     bindActions(socket, store)
-    socket.emit('state', {
-        state: 'choose_nickname'
-    })
+    store.dispatch(userConnected(socket))
 })
 
 socketserver.listen(port)

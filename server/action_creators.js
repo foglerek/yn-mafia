@@ -1,3 +1,10 @@
+export function userConnected(socket) {
+    return (dispatch, getState) => {
+        let state = getState();
+        socket.emit('state', state.toJS())
+        return state
+    }
+}
 
 export function joinGame(data) {
     return (dispatch, getState) => {
@@ -26,6 +33,19 @@ export function beginDiscussion() {
     }
 }
 
+export function roundResult() {
+    return (dispatch, getState) => {
+        dispatch(changeState('round_result'))
+        dispatch(startTimer(30))
+    }
+}
+
+export function handleRoundEnd() {
+    return (dispatch, getState) => {
+        dispatch(startRound())
+    }
+}
+
 export function voteUser(data) {
     return (dispatch, getState) => {
         dispatch(updateVotes())
@@ -40,10 +60,11 @@ export function specialVoteUser(data) {
 
 export function startTimer(seconds) {
     return (dispatch, getState) => {
-        let stopTicker = setInterval(() => {
-            let { timer } = getState()
+        dispatch(setTimer(seconds))
+        let ticker = setInterval(() => {
+            let timer = getState().get('timer')
             if (!timer) {
-                stopTicker()
+                clearInterval(ticker)
                 dispatch(timeUp())
             } else {
                 dispatch(setTimer(--timer))
@@ -54,10 +75,17 @@ export function startTimer(seconds) {
 
 export function timeUp() {
     return (dispatch, getState) => {
-        let { state } = getState()
+        let state = getState().get('state')
         switch (state) {
             case 'initial_countdown':
                 dispatch(beginDiscussion())
+            case 'discussion':
+                dispatch(changeState('time_up'))
+                dispatch(setTimer(10))
+            case 'time_up':
+                dispatch(roundResult())
+            case 'round_result':
+                dispatch(handleRoundEnd())
         }
     }
 }
@@ -85,15 +113,20 @@ export function addUser(data) {
 
 export function changeState(toState) {
     return (dispatch, getState) => {
-        let fromState = getState().state
+        let fromState = getState().get('state')
         dispatch(handleStateChange(fromState, toState))
         dispatch({
             type: 'CHANGE_STATE',
-            data
+            fromState,
+            toState
         })
     }
 }
 
 function handleStateChange(fromState, toState) {
-    if (fromState === toState) return
+    return (dispatch, getState) => {
+        let state = getState()
+        if (fromState === toState) return state
+        else return state
+    }
 }

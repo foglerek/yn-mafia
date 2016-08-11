@@ -1,7 +1,7 @@
 import { Map, List } from 'immutable'
 
 let defaultState = {
-    state: ''
+    state: 'waiting_for_players'
 }
 
 export default function reducer(state = defaultState, action) {
@@ -12,7 +12,7 @@ export default function reducer(state = defaultState, action) {
             })
         case 'CHANGE_STATE':
             return state.merge({
-                state: action.data
+                state: action.toState
             })
         case 'ADD_ROLES':
             return state.merge({
@@ -20,7 +20,7 @@ export default function reducer(state = defaultState, action) {
             })
         case 'SET_TIMER':
             return state.merge({
-                timer: action.data
+                timer: action.seconds
             })
 
 

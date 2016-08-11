@@ -3,7 +3,6 @@ import { joinGame, startGame, voteUser, specialVoteUser } from './action_creator
 export default function bindActions(socket, store) {
 
     socket.on('JOIN_GAME', (data) => {
-        console.log('server data', data);
         store.dispatch(joinGame(data))
     })
 
