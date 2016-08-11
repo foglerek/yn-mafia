@@ -8,15 +8,20 @@ let defaultState = {
     users: List([])
 }
 
+let defaultUser = Map({
+    socket_id: null,
+    name: null,
+    role: null
+})
+
 export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case 'ADD_USER':
             return state.updateIn(
                 ['users'],
-                list => list.push(Map(action.user))
+                list => list.push(Map.merge(defaultUser, action.user))
             )
         case 'REMOVE_USER':
-            console.log(action)
             return state.updateIn(
                 ['users'],
                 list => list.filterNot(user => user.get('socket_id') === action.socket_id)
@@ -33,9 +38,7 @@ export default function reducer(state = defaultState, action) {
             return state.merge({
                 timer: action.seconds
             })
-
-
+        default:
+            return Map(state)
     }
-
-    return Map(state);
 }
