@@ -12,12 +12,12 @@
     <script>
       var socket = io();
       let state = {}
-      socket.on('state_changed', function(newState) {
+      socket.on('state', function(newState) {
         state = newState;
         console.log(newState);
       });
       setTimeout(function() {
-        socket.emit('select_character')
+        socket.emit('join_game', { name: 'John' })
       }, 5000);
     </script>
 </body>

@@ -1,5 +1,7 @@
 import config from '../config'
 import server from '../server/main'
+import newStore from '../server/store'
+import bindActions from '../server/actions'
 import _debug from 'debug'
 import socketio from 'socket.io'
 import http from 'http'
@@ -15,10 +17,13 @@ let state = {
     selected_characters: 0
 }
 
+let store = newStore(io);
+
+// Register Socket IO hook
 io.on('connection', (socket) => {
-    socket.on('select_character', () => {
-        state.selected_characters++
-        io.emit('state_changed', state)
+    bindActions(socket, store)
+    socket.emit('state', {
+        state: 'choose_nickname'
     })
 })
 
